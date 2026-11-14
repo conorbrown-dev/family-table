@@ -1,0 +1,45 @@
+@font-face{font-family:Bubblegum;src:url('../fonts/BubblegumSans_400Regular.ttf') format('truetype');font-display:swap}
+@font-face{font-family:Nunito;src:url('../fonts/Nunito_400Regular.ttf') format('truetype');font-display:swap;font-weight:400}
+@font-face{font-family:Nunito;src:url('../fonts/Nunito_600SemiBold.ttf') format('truetype');font-display:swap;font-weight:600}
+:root{color-scheme:light;--pink:#ad4979;--ink:#694063;--border:#efd0e4}
+html.login-pf, .login-pf body{background:#fff5fb; color:var(--ink);font-family:Nunito,sans-serif;min-height:100vh}
+.login-pf body{background-image:radial-gradient(ellipse at 12% 8%,#efddff 0,transparent 42%),radial-gradient(ellipse at 90% 90%,#e7f6dd 0,transparent 45%);background-attachment:fixed}
+.login-pf-page{padding:32px 20px 40px;max-width:560px;margin:auto}
+#kc-header{color:var(--ink);margin-bottom:20px}
+#kc-header-wrapper{font-family:Bubblegum,sans-serif;font-size:36px;letter-spacing:.2px;text-transform:none;padding:0}
+#kc-header-wrapper:before{content:"";display:block;width:138px;height:119px;background:url('../img/strawberry.svg') center/contain no-repeat;margin:0 auto 10px}
+.login-pf-page .card-pf{background:white;border:1.5px solid var(--border);border-radius:30px;box-shadow:0 12px 40px #ad49790b;padding:28px 30px;margin:0 auto;width:100%;max-width:500px}
+#kc-page-title{font-family:Bubblegum,sans-serif;font-size:29px;color:var(--ink);line-height:1.25;margin:0 0 16px}
+.login-pf-page .login-pf-header{margin-bottom:20px}
+label,.control-label{color:var(--ink);font-weight:600;font-size:14px}
+.form-control{background:#fffaf8;border:1.5px solid var(--border);border-radius:16px;padding:12px 14px;height:46px;color:var(--ink);font-family:Nunito,sans-serif;box-shadow:none;font-size:16px}
+.form-control:focus{border-color:var(--pink);box-shadow:0 0 0 3px #efddff;outline:none}
+.input-group .form-control{border-radius:16px 0 0 16px}
+.input-group .btn{border-radius:0 16px 16px 0;border-color:var(--border);background:#fffaf8;color:var(--ink);box-shadow:none;min-height:46px}
+a,a:hover,a:focus{color:var(--pink)}
+a:focus-visible,.btn:focus-visible{outline:3px solid #bf91d9;outline-offset:3px}
+.btn-primary,.btn-primary:hover,.btn-primary:focus,.btn-primary:active{background:var(--pink);border:1px solid var(--pink);border-radius:999px;box-shadow:none;text-shadow:none;padding:12px 18px;font-family:Nunito,sans-serif;font-weight:600;font-size:16px;min-height:46px}
+.btn-primary:hover{background:#963866}
+#kc-form-buttons{margin-top:22px}
+#kc-info-wrapper{background:#efddff;border-radius:20px;padding:18px;margin-top:24px;font-size:14px;color:var(--ink)}
+#kc-info{margin:0}
+.alert{border-radius:16px;font-family:Nunito,sans-serif}
+.alert-error{background:#fff0f1;color:#8d2949;border-color:#efbdcd}
+.alert-success{background:#e7f6dd;color:#426a38;border-color:#b8dbb0}
+#kc-registration span{display:inline-block}
+.login-pf-page .login-pf-signup{color:var(--ink)}
+#kc-locale-dropdown a{color:var(--ink)}
+@media(max-width:480px){.login-pf-page{padding:22px 16px 32px}.login-pf-page .card-pf{padding:24px 20px}#kc-header-wrapper{font-size:32px}#kc-header-wrapper:before{width:115px;height:99px}.login-pf-page .login-pf-header{padding:0}#kc-info-wrapper{padding:16px}}
+
+/* Keycloak 26's inherited PatternFly controls. */
+.login-pf .pf-c-form-control{background:#fffaf8;border:1.5px solid var(--border);border-radius:16px;padding:12px 14px;height:48px;color:var(--ink);font-family:Nunito,sans-serif;box-shadow:none;font-size:16px;--pf-c-form-control--BorderBottomColor:var(--border)}
+.login-pf .pf-c-form-control:focus{border-color:var(--pink);box-shadow:0 0 0 3px #efddff;outline:none}
+.login-pf .pf-c-form__label,.login-pf .pf-c-form__label-text{font-family:Nunito,sans-serif;font-size:14px;font-weight:600;color:var(--ink)}
+.login-pf .pf-c-input-group{border-radius:16px}
+.login-pf .pf-c-input-group .pf-c-form-control{border-radius:16px 0 0 16px}
+.login-pf .pf-c-button.pf-m-control{background:#fffaf8;border:1.5px solid var(--border);border-left:0;border-radius:0 16px 16px 0;color:var(--ink);min-height:48px}
+.login-pf .pf-c-button:after{border:0}
+.login-pf .pf-c-button.pf-m-primary{background:var(--pink);border:1px solid var(--pink);border-radius:999px;box-shadow:none;font-family:Nunito,sans-serif;font-size:16px;font-weight:600;min-height:48px;padding:12px 18px}
+.login-pf .pf-c-button.pf-m-primary:hover{background:#963866}
+.login-pf .pf-c-button.pf-m-primary:focus-visible{outline:3px solid #bf91d9;outline-offset:3px}
+#kc-form-options,#kc-form-wrapper,#kc-registration{font-size:14px;font-family:Nunito,sans-serif}

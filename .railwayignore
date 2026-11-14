@@ -1,0 +1,9 @@
+.git/
+mobile/
+**/node_modules/
+**/bin/
+**/obj/
+**/.env*
+backend/tests/
+.agents/
+.codex/

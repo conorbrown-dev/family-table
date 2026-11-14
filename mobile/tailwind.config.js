@@ -1,0 +1,1 @@
+module.exports={content:['./App.tsx','./src/**/*.{ts,tsx}'],presets:[require('nativewind/preset')],theme:{extend:{colors:{cream:'#fff5fb',forest:'#ad4979',mint:'#e7f6dd',peach:'#ffe0ed',lilac:'#efddff'}}},plugins:[]};

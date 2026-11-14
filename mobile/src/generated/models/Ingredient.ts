@@ -1,0 +1,11 @@
+/* generated using openapi-typescript-codegen -- do not edit */
+/* istanbul ignore file */
+/* tslint:disable */
+/* eslint-disable */
+export type Ingredient = {
+    id: string;
+    name: string;
+    category: string;
+    archived?: boolean;
+};
+

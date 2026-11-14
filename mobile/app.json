@@ -1,0 +1,25 @@
+{
+  "expo": {
+    "name": "Family Table",
+    "slug": "family-table",
+    "scheme": "familytable",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "web": {
+      "bundler": "metro"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "app.familytable.mobile"
+    },
+    "android": {
+      "package": "app.familytable.mobile"
+    },
+    "plugins": [
+      "expo-secure-store",
+      "expo-web-browser",
+      "./plugins/withAndroidDevelopmentBuild"
+    ]
+  }
+}

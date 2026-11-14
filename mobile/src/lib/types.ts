@@ -1,0 +1,13 @@
+export type Role='Owner'|'Member';
+export type Ingredient={id:string;name:string;category:string;archived:boolean};
+export type Portion={ingredientId:string;quantity:number;unit:string};
+export type Recipe={id:string;name:string;description:string;minutes:number;servings:number;ingredients:Portion[];instructions:string[];ratings:Record<string,number>;archived:boolean};
+export type GroceryItem=Portion & {id:string;checked:boolean};
+export type GroceryList={id:string;name:string;items:GroceryItem[];archived:boolean};
+export type Meal={id:string;date:string;slot:string;recipeId:string;servings:number};
+export type MealPlan={id:string;name:string;meals:Meal[];archived:boolean};
+export type Kind='ingredient'|'recipe'|'grocery'|'plan';
+export type Change={kind:Kind|'membership';action:string;id?:string;data:any};
+export type Approval={id:string;userId:string;name:string;change:Change;baseRevision:number;status:string;fingerprint?:string};
+export type Family={id:string;name:string;joinCode?:string|null;revision:number;people:{userId:string;name:string;role:Role}[];ingredients:Ingredient[];recipes:Recipe[];groceryLists:GroceryList[];mealPlans:MealPlan[];approvals:Approval[];units:string[]};
+export const collections={ingredient:'ingredients',recipe:'recipes',grocery:'groceryLists',plan:'mealPlans'} as const;

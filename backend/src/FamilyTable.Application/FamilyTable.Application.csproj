@@ -1,0 +1,1 @@
+<Project Sdk="Microsoft.NET.Sdk"><ItemGroup><ProjectReference Include="../FamilyTable.Domain/FamilyTable.Domain.csproj"/><PackageReference Include="MediatR" Version="14.2.0"/></ItemGroup></Project>

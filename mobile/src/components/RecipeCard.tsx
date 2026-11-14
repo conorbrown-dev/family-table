@@ -1,0 +1,8 @@
+import {View,Image,Pressable} from 'react-native';
+import {Text} from './Typography';
+import {Clock,Star,ArrowUpRight} from 'lucide-react-native';
+import {Recipe} from '../lib/types';
+import {recipeImages} from '../lib/demo';
+import {colors,ui} from './ui';
+import {useApp} from '../lib/context';
+export function RecipeCard({recipe,index,compact=false}:{recipe:Recipe;index:number;compact?:boolean}) {const app=useApp();const ratings=Object.values(recipe.ratings);const rating=ratings.length?(ratings.reduce((a,b)=>a+b,0)/ratings.length).toFixed(1):'New';return <Pressable accessibilityRole="button" accessibilityLabel={`View ${recipe.name}`} onPress={()=>app.viewRecipe(recipe.id)} style={{backgroundColor:'#fffdfc',borderRadius:27,borderWidth:1,borderColor:colors.border,overflow:'hidden',flex:1,minWidth:compact?160:240}}><View><Image source={{uri:recipeImages[index%recipeImages.length]}} style={{width:'100%',height:compact?140:190}}/><View style={{position:'absolute',right:12,top:12,backgroundColor:'#fffffff0',paddingHorizontal:10,paddingVertical:6,borderRadius:20,flexDirection:'row',alignItems:'center',gap:4}}><Star size={12} color="#c59341" fill="#c59341"/><Text style={{fontSize:11,fontWeight:'600',color:colors.text}}>{rating}</Text></View></View><View style={{padding:17,gap:9}}><Text style={{fontSize:16,fontWeight:'600',color:colors.text}} numberOfLines={2}>{recipe.name}</Text>{!compact&&<Text style={[ui.subtitle,{fontSize:12}]} numberOfLines={2}>{recipe.description}</Text>}<View style={ui.between}><View style={[ui.row,{gap:5}]}><Clock size={13} color={colors.muted}/><Text style={{fontSize:11,color:colors.muted}}>{recipe.minutes} min · {recipe.servings} servings</Text></View><ArrowUpRight size={17} color={colors.forest}/></View></View></Pressable>}
