@@ -1,0 +1,30 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,
+    "baseUrl": ".",
+    "paths": {
+      "react": [
+        "node_modules/@types/react"
+      ],
+      "react/*": [
+        "node_modules/@types/react/*"
+      ],
+      "*": [
+        "node_modules/*"
+      ]
+    }
+  },
+  "include": [
+    "src/**/*.ts",
+    "index.ts",
+    "../mobile/**/*.ts",
+    "../mobile/**/*.tsx",
+    "../mobile/nativewind-env.d.ts",
+    "nativewind-env.d.ts"
+  ],
+  "exclude": [
+    "../mobile/node_modules",
+    "node_modules"
+  ]
+}

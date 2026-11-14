@@ -1,5 +1,7 @@
 .git/
-mobile/
+mobile/android/
+mobile/docs/
+mobile/artifacts/
 **/node_modules/
 **/bin/
 **/obj/
@@ -7,3 +9,6 @@ mobile/
 backend/tests/
 .agents/
 .codex/
+
+**/dist/
+**/.expo/

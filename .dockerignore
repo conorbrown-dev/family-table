@@ -3,5 +3,10 @@
 **/bin
 **/obj
 **/.env*
-mobile
+mobile/android
+mobile/docs
+mobile/artifacts
 backend/tests
+
+**/dist/
+**/.expo/

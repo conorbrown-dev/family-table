@@ -1,7 +1,9 @@
 import './global.css';
 import {useFonts} from 'expo-font';
-import {BubblegumSans_400Regular} from '@expo-google-fonts/bubblegum-sans';
-import {Nunito_400Regular,Nunito_600SemiBold,Nunito_800ExtraBold} from '@expo-google-fonts/nunito';
+import {BubblegumSans_400Regular} from '@expo-google-fonts/bubblegum-sans/400Regular';
+import {Nunito_400Regular} from '@expo-google-fonts/nunito/400Regular';
+import {Nunito_600SemiBold} from '@expo-google-fonts/nunito/600SemiBold';
+import {Nunito_800ExtraBold} from '@expo-google-fonts/nunito/800ExtraBold';
 import React,{useEffect,useState,useRef} from 'react';
 import {View,Pressable,ScrollView,useWindowDimensions,ActivityIndicator,Platform} from 'react-native';
 import {Text} from './src/components/Typography';

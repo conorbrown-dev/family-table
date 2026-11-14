@@ -31,6 +31,40 @@
           }
         }
       ]
+    },
+    {
+      "clientId": "familytable-web",
+      "name": "Family Table Web",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": false,
+      "implicitFlowEnabled": false,
+      "redirectUris": [
+        "https://familytable.orangecastle.net/callback",
+        "http://localhost:8083/callback"
+      ],
+      "webOrigins": [
+        "https://familytable.orangecastle.net",
+        "http://localhost:8083"
+      ],
+      "attributes": {
+        "pkce.code.challenge.method": "S256",
+        "post.logout.redirect.uris": "https://familytable.orangecastle.net/##http://localhost:8083/"
+      },
+      "protocolMappers": [
+        {
+          "name": "api-audience",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "config": {
+            "included.custom.audience": "familytable-api",
+            "access.token.claim": "true",
+            "id.token.claim": "false"
+          }
+        }
+      ]
     }
   ],
   "loginTheme": "familytable",

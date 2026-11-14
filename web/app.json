@@ -1,0 +1,17 @@
+{
+  "expo": {
+    "name": "Family Table",
+    "slug": "family-table-web",
+    "version": "1.0.0",
+    "platforms": [
+      "web"
+    ],
+    "web": {
+      "bundler": "metro",
+      "output": "single",
+      "name": "Family Table",
+      "description": "Manage recipes, meal plans, grocery lists, and family approvals."
+    },
+    "userInterfaceStyle": "light"
+  }
+}

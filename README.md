@@ -118,3 +118,8 @@ This is an initial working implementation, not a deployed production service. Re
 MediatR 14 is under its current commercial/community license terms; review eligibility and configure its license key if your deployment requires one. The current mobile dependency audit has unresolved advisories, including Expo/Tailwind transitive tooling. They must be reviewed before release; blindly applying `npm audit fix --force` would downgrade Expo or change unsupported major versions. See VALIDATION.md.
 
 Recipe-card photos in the sample interface load from Unsplash; text and editing work independently of those remote images. Custom recipe-photo uploads and app-store publishing are not included.
+
+
+## Web app
+
+The browser app is in [`web`](web/README.md) and shares the mobile screens and business logic. It is hosted on Railway at https://familytable.orangecastle.net and uses the same API and family data. Run `npm ci --prefix web`, copy `web/.env.example` to `web/.env`, then `npm start --prefix web` for local development.
