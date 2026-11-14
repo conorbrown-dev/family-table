@@ -1,5 +1,6 @@
 FROM node:22-bookworm-slim AS build
 WORKDIR /app/web
+ENV NODE_PATH=/app/web/node_modules
 COPY web/package.json web/package-lock.json web/.npmrc ./
 RUN npm ci --no-audit --no-fund
 COPY mobile/App.tsx mobile/global.css mobile/tailwind.config.js /app/mobile/
