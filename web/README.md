@@ -33,3 +33,5 @@ Set build variables `EXPO_PUBLIC_API_URL` and `EXPO_PUBLIC_AUTH_URL` to the exis
 Allow `https://familytable.orangecastle.net` in the API's `Cors:Origins`. Both realm import files contain the dedicated `familytable-web` client for fresh environments; existing realms are updated through the Keycloak Admin API. Do not replace the existing mobile client or database connection.
 
 Cloudflare DNS routes `familytable.orangecastle.net` to the Railway custom-domain CNAME target, with the `_railway-verify.familytable` TXT ownership record. Railway issues the HTTPS certificate.
+
+The Railway service follows `codex/web-app` on GitHub and rebuilds automatically on changes to the web app or shared mobile source. Public API/Keycloak URLs stayed the same during the November database migration; both mobile and web therefore reach the migrated data through the same API. The web container has no database credentials or direct database access.

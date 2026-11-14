@@ -57,3 +57,14 @@ Removed single-line JSX spaces under native containers in App, Family, and Ingre
 ## Username identity
 
 Removed firstName and lastName from the live Keycloak user profile and both realm import configurations. Verified registration displays only username, password/confirmation, and email. The API now uses preferred_username for newly added family members. Backend build succeeded with zero warnings/errors. No mobile rebuild is required: registration is hosted and member names come from the API.
+
+
+## Web app and custom domain (2026-11-14)
+
+Added `/web` with an Expo web entry point sharing mobile screens, forms, API client, and business logic. Browser authentication uses a dedicated `familytable-web` public Keycloak client, authorization code with S256 PKCE, exact production/local callback origins, session storage, token renewal, and end-session sign-out. Both realm imports include the browser client. No first/last name fields were added.
+
+Railway `web` service `8b7937eb-5652-40b9-9d31-5fd78ccfdda4` follows `codex/web-app` in `conorbrown-dev/family-table` and builds `web/Dockerfile` from the repo root. Successful deployment: `6d52e9fa-7ff2-4a7f-aae2-c411dea93656`. The container uses the same API and migrated Keycloak service URLs as mobile, and no database credentials. Cloudflare CNAME/TXT records were created; Railway verified `familytable.orangecastle.net` and issued its HTTPS certificate.
+
+Validation: production export and TypeScript checks pass; four shared app logic tests and the native raw-text regression check pass. The web server test covers SPA callbacks, health, immutable assets, missing assets/private files, and unsupported methods. Live `/health` returns ready, `/callback` serves the SPA (200), `/.env` returns 404, and API preflight allows only the configured web origin (an unrelated origin receives no allow-origin header). Live sign-in reaches the themed Keycloak page with the correct web client, HTTPS callback, state, and S256 challenge. Signed-in callback/data loading awaits the user's existing-account check; a temporary test account was not created.
+
+Browser demo validation: desktop dashboard renders the same pastel design; saving a recipe with optional multiline instructions works; PDF selection exposes combined/separate sheets; clicking print invoked a blocking browser print flow that could not be inspected through the in-app browser automation. At 390px wide the app has no horizontal overflow and uses the phone navigation layout. Saved screenshot proof is under `web/docs`. Production demo mode is false; production builds clear the Metro cache to prevent development environment flags being reused. Shared font imports now bundle only the four fonts actually used.
