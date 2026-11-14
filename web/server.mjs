@@ -4,7 +4,7 @@ import {stat} from 'node:fs/promises';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 
-const types={'.html':'text/html; charset=utf-8','.js':'application/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json','.svg':'image/svg+xml','.png':'image/png','.jpg':'image/jpeg','.webp':'image/webp','.ico':'image/x-icon','.ttf':'font/ttf','.woff':'font/woff','.woff2':'font/woff2'};
+const types={'.html':'text/html; charset=utf-8','.js':'application/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json','.webmanifest':'application/manifest+json','.svg':'image/svg+xml','.png':'image/png','.jpg':'image/jpeg','.webp':'image/webp','.ico':'image/x-icon','.ttf':'font/ttf','.woff':'font/woff','.woff2':'font/woff2'};
 export function createApp(root=path.join(path.dirname(fileURLToPath(import.meta.url)),'dist')){
  return http.createServer(async(req,res)=>{
   res.setHeader('X-Content-Type-Options','nosniff');
@@ -21,7 +21,7 @@ export function createApp(root=path.join(path.dirname(fileURLToPath(import.meta.
    if(path.extname(pathname)||pathname.startsWith('/assets/')||pathname.startsWith('/_expo/')){res.writeHead(404);res.end();return;}
    file=path.join(root,'index.html');
   }
-  try{const info=await stat(file);res.writeHead(200,{'Content-Type':types[path.extname(file)]??'application/octet-stream','Content-Length':info.size,'Cache-Control':path.extname(file)==='.html'?'no-cache':pathname.startsWith('/_expo/static/')?'public, max-age=31536000, immutable':'public, max-age=3600'});if(req.method==='HEAD')res.end();else createReadStream(file).on('error',()=>res.destroy()).pipe(res);}catch{res.writeHead(503);res.end('Application build is unavailable.');}
+  try{const info=await stat(file);res.writeHead(200,{'Content-Type':types[path.extname(file)]??'application/octet-stream','Content-Length':info.size,'Cache-Control':(path.extname(file)==='.html'||pathname==='/sw.js'||pathname==='/manifest.webmanifest')?'no-cache':pathname.startsWith('/_expo/static/')?'public, max-age=31536000, immutable':'public, max-age=3600'});if(req.method==='HEAD')res.end();else createReadStream(file).on('error',()=>res.destroy()).pipe(res);}catch{res.writeHead(503);res.end('Application build is unavailable.');}
  });
 }
 if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)){

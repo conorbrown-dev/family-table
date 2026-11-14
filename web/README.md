@@ -35,3 +35,15 @@ Allow `https://familytable.orangecastle.net` in the API's `Cors:Origins`. Both r
 Cloudflare DNS routes `familytable.orangecastle.net` to the Railway custom-domain CNAME target, with the `_railway-verify.familytable` TXT ownership record. Railway issues the HTTPS certificate.
 
 The Railway service follows `codex/web-app` on GitHub and rebuilds automatically on changes to the web app or shared mobile source. Public API/Keycloak URLs stayed the same during the November database migration; both mobile and web therefore reach the migrated data through the same API. The web container has no database credentials or direct database access.
+
+## Install on Android
+
+Open https://familytable.orangecastle.net in Chrome, open the three-dot menu, choose **Add to Home screen → Install** (or **Install app**), and confirm. Launch **Family Table** from the home screen. It opens in its own window and uses the same account, API, and family data as the browser and native app.
+
+The build adds a web manifest with a stable app identity, standalone display, pastel theme, and 192/512px maskable strawberry icons. `scripts/build-pwa.mjs` links the metadata and emits the service worker after Expo exports the site. The server serves the manifest and worker with revalidation headers so updates can be discovered.
+
+The worker caches only public icons, the manifest, and a connection-required page. Authenticated pages, OAuth callbacks, API responses, and write requests are never cached. Recipes and lists still require an internet connection. Worker updates wait for open windows to close and never reload a form automatically.
+
+## Dialog drafts
+
+Closing an editor keeps its unsaved fields during the current app session. Drafts are separate for each user, family, record, and generated grocery list. **Clear** resets editable fields to their defaults without changing saved data. Successful saves or approval submissions finish that draft. Print selections also survive closing and have a Clear button. Reloading the page or restarting the app ends the in-memory draft session.
