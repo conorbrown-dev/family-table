@@ -17,6 +17,7 @@ export type { FamilyView } from './models/FamilyView';
 export type { GroceryItem } from './models/GroceryItem';
 export type { GroceryList } from './models/GroceryList';
 export type { Ingredient } from './models/Ingredient';
+export type { InstacartLink } from './models/InstacartLink';
 export type { InviteRequest } from './models/InviteRequest';
 export type { JoinRequest } from './models/JoinRequest';
 export type { JoinResult } from './models/JoinResult';

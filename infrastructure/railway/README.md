@@ -20,6 +20,8 @@ railway up --project 769cf573-cb1d-4e70-94c4-5a8488b60bed --environment developm
 
 Each service selects its Dockerfile through `RAILWAY_DOCKERFILE_PATH`. These are local source uploads, not GitHub autodeploys.
 
+Instacart ordering needs `Instacart__ApiKey` on the `api` service (Railway → api → Variables). Development keys work with the default `Instacart__BaseUrl` (`https://connect.dev.instacart.tools`); switch it to `https://connect.instacart.com` with a production key. Optionally set `Instacart__LinkbackUrl` to the web app's URL.
+
 Email is deferred: `Smtp__Enabled=false` returns a clear 503 for invitations. Account registration currently does not require email verification; email-bound invitations still require a verified address. Use family codes and owner approval to join. When configuring SMTP, set API SMTP variables and Keycloak realm SMTP settings, enable verification, and set `EXPO_PUBLIC_EMAIL_ENABLED=true` in the development server environment. Realm imports do not overwrite existing realms; change existing settings through the Keycloak admin API or console.
 
 For Android, install dependencies in `mobile`, open the generated `mobile/android` folder in Android Studio, and run `scripts/android-dev.sh`. The script builds an ARM64 debug APK with Expo Dev Client using JDK 17, installs it through ADB, and forwards Metro on port 8082 over USB. Approve the phone's USB debugging prompt. For this machine's temporary runtime, set `FAMILYTABLE_MOBILE_DIR=/tmp/familytable-runtime`.

@@ -1,3 +1,4 @@
+using System.Net.Http.Json;
 using System.Security.Claims;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -12,6 +13,7 @@ var builder=WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<FamilyDb>(o=>o.UseNpgsql(builder.Configuration.GetConnectionString("Database")));
 builder.Services.AddScoped<IFamilyRepository,FamilyRepository>();
 builder.Services.AddScoped<IEmailSender,SmtpEmailSender>();
+builder.Services.AddHttpClient<IInstacartClient,InstacartClient>(c=>c.Timeout=TimeSpan.FromSeconds(20));
 builder.Services.AddMediatR(c=>{c.RegisterServicesFromAssemblyContaining<ReadFamily>();if(!string.IsNullOrWhiteSpace(builder.Configuration["MediatR:LicenseKey"]))c.LicenseKey=builder.Configuration["MediatR:LicenseKey"];});
 builder.Services.AddOpenApi();
 builder.Services.ConfigureHttpJsonOptions(o=>o.SerializerOptions.Converters.Add(new JsonStringEnumConverter()));
@@ -24,8 +26,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 builder.Services.AddAuthorization();
 builder.Services.AddCors(c=>c.AddDefaultPolicy(p=>p.WithOrigins(builder.Configuration.GetSection("Cors:Origins").Get<string[]>()??["http://localhost:8081"]).AllowAnyHeader().AllowAnyMethod()));
 var app=builder.Build();
-app.Use(async(ctx,next)=>{try{await next();}catch(Exception ex) when(ex is ArgumentException or UnauthorizedAccessException or KeyNotFoundException or InvalidOperationException) {
- var status=ex switch {UnauthorizedAccessException=>403,KeyNotFoundException=>404,InvalidOperationException=>409,_=>400};
+app.Use(async(ctx,next)=>{try{await next();}catch(Exception ex) when(ex is ArgumentException or UnauthorizedAccessException or KeyNotFoundException or InvalidOperationException or InstacartUnavailableException) {
+ var status=ex switch {UnauthorizedAccessException=>403,KeyNotFoundException=>404,InvalidOperationException=>409,InstacartUnavailableException=>502,_=>400};
  await Results.Problem(title:ex.Message,statusCode:status).ExecuteAsync(ctx);
 }});
 app.UseCors(); app.UseAuthentication(); app.UseAuthorization();
@@ -80,6 +82,11 @@ api.MapPost("/families/{id:guid}/rotate-code",async(Guid id,ClaimsPrincipal u,IF
 api.MapGet("/families/{id:guid}/plans/{planId:guid}/needed",async(Guid id,Guid planId,ClaimsPrincipal u,IFamilyRepository repo,CancellationToken ct)=>{
  var f=await repo.Find(id,ct)??throw new KeyNotFoundException("Family not found.");f.RequireMember(User(u));return f.Needed(planId);
 }).WithName("GetNeededIngredients");
+// Turns a grocery list into an Instacart shopping list page; the app opens the returned link so the user can fill their cart and check out on Instacart.
+api.MapPost("/families/{id:guid}/groceries/{listId:guid}/instacart",async(Guid id,Guid listId,ClaimsPrincipal u,ISender sender,IConfiguration config,CancellationToken ct)=>{
+ if(string.IsNullOrWhiteSpace(config["Instacart:ApiKey"]))return Results.Problem(title:"Ordering on Instacart isn't set up yet.",statusCode:503);
+ return Results.Ok(await sender.Send(new OrderOnInstacart(id,User(u),listId,config["Instacart:LinkbackUrl"]),ct));
+}).WithName("OrderOnInstacart").Produces<InstacartLink>();
 if(args.Contains("--initialize")) { using var scope=app.Services.CreateScope();await scope.ServiceProvider.GetRequiredService<FamilyDb>().Database.EnsureCreatedAsync();return; }
 app.Run();
 public record FamilySummary(Guid Id,string Name,Role Role);
@@ -98,5 +105,22 @@ public class SmtpEmailSender(IConfiguration config):IEmailSender {
   if(!string.IsNullOrWhiteSpace(config["Smtp:Username"]))smtp.Credentials=new System.Net.NetworkCredential(config["Smtp:Username"],config["Smtp:Password"]);
   using var message=new MailMessage(config["Smtp:From"]??"hello@familytable.local",email) {Subject=$"You're invited to {family} on Family Table",Body=$"You have been invited to join {family}. Open Family Table, sign in with this email, and enter this invitation in the Family tab.\n\n{token}\n\nThis invitation lasts 7 days."};
   await smtp.SendMailAsync(message,ct);
+ }
+}
+public class InstacartClient(HttpClient http,IConfiguration config):IInstacartClient {
+ public async Task<string> CreateShoppingListPage(InstacartShoppingListRequest request,CancellationToken ct) {
+  var baseUrl=(config["Instacart:BaseUrl"]??"https://connect.dev.instacart.tools").TrimEnd('/');
+  using var message=new HttpRequestMessage(HttpMethod.Post,$"{baseUrl}/idp/v1/products/products_link"){Content=JsonContent.Create(request)};
+  message.Headers.Authorization=new("Bearer",config["Instacart:ApiKey"]);
+  message.Headers.Accept.Add(new("application/json"));
+  HttpResponseMessage response;
+  try { response=await http.SendAsync(message,ct); }
+  catch(Exception ex) when(ex is HttpRequestException or TaskCanceledException) { throw new InstacartUnavailableException("Instacart didn't respond. Try again in a moment.",ex); }
+  using(response) {
+   if(!response.IsSuccessStatusCode) throw new InstacartUnavailableException($"Instacart couldn't create the shopping list ({(int)response.StatusCode}). Try again in a moment.");
+   var body=await response.Content.ReadFromJsonAsync<JsonElement>(ct);
+   if(body.ValueKind!=JsonValueKind.Object||!body.TryGetProperty("products_link_url",out var url)||url.ValueKind!=JsonValueKind.String||url.GetString() is not {Length:>0} link) throw new InstacartUnavailableException("Instacart sent back an unexpected answer. Try again in a moment.");
+   return link;
+  }
  }
 }

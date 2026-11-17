@@ -7,6 +7,7 @@ import type { CreateFamilyRequest } from '../models/CreateFamilyRequest';
 import type { DecisionRequest } from '../models/DecisionRequest';
 import type { FamilySummary } from '../models/FamilySummary';
 import type { FamilyView } from '../models/FamilyView';
+import type { InstacartLink } from '../models/InstacartLink';
 import type { InviteRequest } from '../models/InviteRequest';
 import type { JoinRequest } from '../models/JoinRequest';
 import type { JoinResult } from '../models/JoinResult';
@@ -216,6 +217,25 @@ export class FamilyTableApiService {
             path: {
                 'id': id,
                 'planId': planId,
+            },
+        });
+    }
+    /**
+     * @param id
+     * @param listId
+     * @returns InstacartLink OK
+     * @throws ApiError
+     */
+    public static orderOnInstacart(
+        id: string,
+        listId: string,
+    ): CancelablePromise<InstacartLink> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/families/{id}/groceries/{listId}/instacart',
+            path: {
+                'id': id,
+                'listId': listId,
             },
         });
     }

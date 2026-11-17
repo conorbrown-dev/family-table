@@ -53,8 +53,17 @@ For a physical phone, replace localhost URLs with your development machine’s r
 - Optimistic revision checks prevent concurrent writes from silently replacing each other. Approval fingerprints reject requests if their target changed after submission.
 - Print grocery lists, all needed meal-plan ingredients, and meal plans together or with page breaks. Native devices create and share a PDF; browsers use the print dialog’s “Save as PDF.” Large lists may span multiple pages rather than shrinking to unreadable text.
 - Multiple families, multiple owners, role changes, code rotation, and last-owner protection.
+- Order a grocery list on Instacart: unchecked items become an Instacart shopping list page, where the user picks a store, adds the items to their cart, and checks out. See [Instacart](#instacart).
 
 Quantities aggregate only when ingredient and unit match. Cups, ounces, packages, and jars remain separate: mass/volume conversions need ingredient density, and package sizes vary. Units include each, cups, fluid ounces, ounces, pounds, teaspoons, tablespoons, pints, quarts, gallons, grams, kilograms, milliliters, liters, packages, jars, jugs, boxes, containers, cans, bags, bunches, slices, and cloves.
+
+## Instacart
+
+"Order on Instacart" on a grocery list calls `POST /api/families/{id}/groceries/{listId}/instacart`. The API sends the list's unchecked items to Instacart Developer Platform's [Create shopping list page](https://docs.instacart.com/developer_platform_api/api/products/create_shopping_list_page) endpoint and returns the page link; the app opens it (the Instacart app on phones when installed, a new tab on the web). Instacart offers no API that fills a user's cart directly, so the user confirms the store and adds the items there before checking out.
+
+- Configuration (API service): `Instacart__ApiKey` (required; without it the endpoint returns 503), `Instacart__BaseUrl` (defaults to the development server `https://connect.dev.instacart.tools`; use `https://connect.instacart.com` with a production key), and optional `Instacart__LinkbackUrl` (shown on Instacart's page as a link back to Family Table). Keep the key on the API only.
+- Same ingredient and unit are combined. Units convert to Instacart's names (tbsp → tablespoon, lb → pound, fl oz → cups). Units Instacart doesn't have (jar, jug, box, container, bag, slice, clove) are sent as whole packages or items, with the original amount in the item's label, e.g. "Pickled jalapeños (0.25 jar)".
+- Each tap creates a new Instacart page. Getting a production key requires Instacart's approval and following its developer and branding guidelines.
 
 ## Ingredient catalog
 
